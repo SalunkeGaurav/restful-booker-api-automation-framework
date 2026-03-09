@@ -59,7 +59,8 @@ restful-booker-api-automation-framework/
 ├── src/test/resources/
 │   ├── config.properties           → base URL, username, password, timeout
 │   ├── log4j2.xml                  → logging settings
-│   └── testdata/bookings.json      → test data for valid and invalid bookings
+│   ├── testdata/bookings.json      → test data for invalid bookings
+│   └── schemas/booking-schema.json → schema for response schema validation
 │
 ├── testng.xml                      → controls which tests run
 └── pom.xml                         → all project dependencies
