@@ -19,7 +19,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependency Versions -->
-        <allure.version>2.29.0</allure.version>
         <aspectj.version>1.9.20.1</aspectj.version>
         <testng.version>7.8.0</testng.version>
         <jackson.version>2.15.2</jackson.version>
@@ -104,7 +103,14 @@
             <version>${allure.version}</version>
         </dependency>
 
-    </dependencies>
+    
+        <!-- ASPECTJ WEAVER — required for Allure to work with TestNG -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+</dependencies>
 
     <!-- ===================== BUILD PLUGINS ===================== -->
     <build>
@@ -119,12 +125,22 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
                     <systemPropertyVariables>
                         <allure.results.directory>
                             ${project.build.directory}/allure-results
                         </allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <!-- ALLURE MAVEN — generates allure report with mvn allure:report -->
