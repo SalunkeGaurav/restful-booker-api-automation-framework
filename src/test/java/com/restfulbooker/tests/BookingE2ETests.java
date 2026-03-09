@@ -4,12 +4,15 @@ import com.restfulbooker.clients.BookingClient;
 import com.restfulbooker.models.Booking;
 import com.restfulbooker.models.BookingDates;
 import com.restfulbooker.base.BaseTest;
+import com.restfulbooker.utils.FrameworkConstants;
 import com.restfulbooker.utils.LoggerUtils;
 import com.restfulbooker.utils.RandomDataUtil;
 import io.restassured.response.Response;
 import io.qameta.allure.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 
 public class BookingE2ETests extends BaseTest {
@@ -53,9 +56,10 @@ public class BookingE2ETests extends BaseTest {
     public void testGetBooking() {
         Response response = BookingClient.getBooking(bookingId);
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertNull(response.jsonPath().getString("booking.firstname"));
-        Assert.assertNull(response.jsonPath().getString("booking.lastname"));
-
+        Assert.assertNotNull(response.jsonPath().getString("firstname"));
+        Assert.assertNotNull(response.jsonPath().getString("lastname"));
+        response.then().assertThat()
+                .body(matchesJsonSchemaInClasspath(FrameworkConstants.BOOKING_SCHEMA));
     }
 
     @Test(dependsOnMethods = "testGetBooking")
